@@ -1,218 +1,304 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Math Poster Materials Checklist</title>
 
-<title>Math Poster Checklist</title>
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Segoe UI,Arial,sans-serif;
+}
 
-<link rel="stylesheet" href="style.css">
+body{
+    background:#eef3ff;
+    padding:30px;
+}
 
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+.container{
+    max-width:900px;
+    margin:auto;
+    background:white;
+    border-radius:15px;
+    padding:25px;
+    box-shadow:0 10px 25px rgba(0,0,0,.15);
+}
 
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+h1{
+    text-align:center;
+    color:#2c3e50;
+    margin-bottom:10px;
+}
 
+.subtitle{
+    text-align:center;
+    color:#666;
+    margin-bottom:25px;
+}
+
+.progressBox{
+    margin-bottom:25px;
+}
+
+.progress{
+    width:100%;
+    height:24px;
+    background:#ddd;
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.bar{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,#00c853,#64dd17);
+    transition:.4s;
+}
+
+#percent{
+    margin-top:8px;
+    font-weight:bold;
+    text-align:center;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+    gap:20px;
+}
+
+.card{
+    border:2px solid #ddd;
+    border-radius:12px;
+    padding:18px;
+}
+
+.card h2{
+    margin-bottom:15px;
+    color:#1565c0;
+}
+
+label{
+    display:block;
+    margin:10px 0;
+    cursor:pointer;
+    font-size:17px;
+}
+
+input[type=checkbox]{
+    transform:scale(1.2);
+    margin-right:10px;
+}
+
+.addBox{
+    margin-top:25px;
+    display:flex;
+    gap:10px;
+}
+
+.addBox input{
+    flex:1;
+    padding:10px;
+    font-size:16px;
+}
+
+button{
+    padding:10px 18px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:15px;
+}
+
+.addBtn{
+    background:#1976d2;
+    color:white;
+}
+
+.resetBtn{
+    background:#e53935;
+    color:white;
+    margin-top:20px;
+}
+
+.custom{
+    margin-top:20px;
+}
+
+.custom h2{
+    color:#8e24aa;
+    margin-bottom:10px;
+}
+</style>
 </head>
 
 <body>
 
-<div class="app">
+<div class="container">
 
-<!-- ================= HEADER ================= -->
+<h1>📋 Math Poster Materials Checklist</h1>
+<p class="subtitle">Tick the materials you already have.</p>
 
-<header>
+<div class="progressBox">
+<div class="progress">
+<div class="bar" id="bar"></div>
+</div>
+<div id="percent"></div>
+</div>
 
-<div class="logo">
+<div class="grid">
 
-<span class="material-icons">shopping_cart</span>
+<div class="card">
+<h2>Poster Materials</h2>
 
-<div>
-<h1>Math Poster Checklist</h1>
-<p>Everything you need for your competition</p>
+<label><input type="checkbox">A3 Chart Paper</label>
+<label><input type="checkbox">Pencil</label>
+<label><input type="checkbox">Eraser</label>
+<label><input type="checkbox">Ruler</label>
+<label><input type="checkbox">Black Marker</label>
+<label><input type="checkbox">12 Color Sketch Pens</label>
+<label><input type="checkbox">Color Pencils / Crayons</label>
+<label><input type="checkbox">Compass</label>
+<label><input type="checkbox">White Gel Pen</label>
+
+</div>
+
+<div class="card">
+<h2>Colors Needed</h2>
+
+<label><input type="checkbox">Black</label>
+<label><input type="checkbox">Dark Blue</label>
+<label><input type="checkbox">Light Blue / Sky Blue</label>
+<label><input type="checkbox">Purple</label>
+<label><input type="checkbox">Pink</label>
+<label><input type="checkbox">Red</label>
+<label><input type="checkbox">Orange</label>
+<label><input type="checkbox">Yellow</label>
+<label><input type="checkbox">Green</label>
+<label><input type="checkbox">Brown</label>
+<label><input type="checkbox">Grey</label>
+
 </div>
 
 </div>
 
-<div class="headerButtons">
+<div class="custom">
 
-<button id="themeBtn" class="iconBtn">
-<span class="material-icons">dark_mode</span>
-</button>
+<h2>➕ Add Your Own Material</h2>
 
-<button id="resetBtn" class="iconBtn">
-<span class="material-icons">restart_alt</span>
-</button>
+<div class="addBox">
+<input id="newItem" placeholder="Example: Glitter Pen">
+<button class="addBtn" onclick="addItem()">Add</button>
+</div>
+
+<div id="customList"></div>
 
 </div>
 
-</header>
-
-<!-- ================= SEARCH ================= -->
-
-<section class="searchSection">
-
-<div class="searchBox">
-
-<span class="material-icons">search</span>
-
-<input
-type="text"
-id="searchInput"
-placeholder="Search materials...">
+<button class="resetBtn" onclick="resetAll()">Reset Checklist</button>
 
 </div>
 
-</section>
+<script>
 
-<!-- ================= FILTERS ================= -->
+const customList=document.getElementById("customList");
 
-<section class="filters">
+function save(){
+const states=[];
+document.querySelectorAll("input[type=checkbox]").forEach(c=>{
+states.push(c.checked);
+});
+localStorage.setItem("states",JSON.stringify(states));
+localStorage.setItem("custom",customList.innerHTML);
+update();
+}
 
-<button class="filter active" data-filter="all">
+function load(){
 
-All
+if(localStorage.getItem("custom")){
+customList.innerHTML=localStorage.getItem("custom");
+}
 
-</button>
+const boxes=document.querySelectorAll("input[type=checkbox]");
 
-<button class="filter" data-filter="materials">
+const saved=JSON.parse(localStorage.getItem("states"));
 
-Poster Materials
+if(saved){
+boxes.forEach((b,i)=>{
+b.checked=saved[i];
+});
+}
 
-</button>
+boxes.forEach(b=>{
+b.onchange=save;
+});
 
-<button class="filter" data-filter="colors">
+customList.querySelectorAll("input[type=checkbox]").forEach(b=>{
+b.onchange=save;
+});
 
-Colors
+update();
+}
 
-</button>
+function addItem(){
 
-<button class="filter" data-filter="custom">
+const txt=document.getElementById("newItem").value.trim();
 
-Custom
+if(txt==="") return;
 
-</button>
+const label=document.createElement("label");
 
-</section>
+label.innerHTML='<input type="checkbox">'+txt;
 
-<!-- ================= PROGRESS ================= -->
+customList.appendChild(label);
 
-<section class="progressCard">
+document.getElementById("newItem").value="";
 
-<div class="progressHeader">
+label.querySelector("input").onchange=save;
 
-<h3>Your Progress</h3>
+save();
 
-<span id="progressText">
-0%
-</span>
+}
 
-</div>
+function update(){
 
-<div class="progressBar">
+const boxes=document.querySelectorAll("input[type=checkbox]");
 
-<div id="progressFill"></div>
+let checked=0;
 
-</div>
+boxes.forEach(b=>{
+if(b.checked) checked++;
+});
 
-<p id="progressDescription">
+const total=boxes.length;
 
-0 of 0 materials collected
+const percent=Math.round(checked/total*100);
 
-</p>
+document.getElementById("bar").style.width=percent+"%";
 
-</section>
+document.getElementById("percent").innerHTML=
+checked+" / "+total+" Materials Ready ("+percent+"%)";
 
-<!-- ================= ACTIONS ================= -->
+}
 
-<section class="actions">
+function resetAll(){
 
-<button id="selectAll">
+if(confirm("Reset the checklist?")){
 
-<span class="material-icons">done_all</span>
+localStorage.clear();
 
-Select All
+location.reload();
 
-</button>
+}
 
-<button id="clearAll">
+}
 
-<span class="material-icons">remove_done</span>
+window.onload=load;
 
-Clear All
-
-</button>
-
-<button id="exportBtn">
-
-<span class="material-icons">download</span>
-
-Export
-
-</button>
-
-</section>
-
-<!-- ================= LIST ================= -->
-
-<section id="listContainer">
-
-<!-- Generated by JavaScript -->
-
-</section>
-
-<!-- ================= CUSTOM ITEM ================= -->
-
-<section class="customCard">
-
-<h2>
-
-<span class="material-icons">
-
-playlist_add
-
-</span>
-
-Add Custom Material
-
-</h2>
-
-<div class="customInput">
-
-<input
-type="text"
-id="customInput"
-placeholder="Example: Glue Stick">
-
-<button id="addBtn">
-
-<span class="material-icons">
-
-add
-
-</span>
-
-Add
-
-</button>
-
-</div>
-
-</section>
-
-<!-- ================= FOOTER ================= -->
-
-<footer>
-
-Made with ❤️ for Math Poster Competition
-
-</footer>
-
-</div>
-
-<script src="app.js"></script>
+</script>
 
 </body>
-
 </html>
